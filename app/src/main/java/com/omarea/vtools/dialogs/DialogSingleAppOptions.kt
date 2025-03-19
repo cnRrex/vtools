@@ -57,7 +57,12 @@ class DialogSingleAppOptions(context: Activity, var app: AppInfo, handler: Handl
 
         val dialog = DialogHelper.customDialog(context, dialogView)
         dialogView.findViewById<TextView>(R.id.app_target_sdk).text = "SDK" + app.targetSdkVersion.toString()
-        dialogView.findViewById<TextView>(R.id.app_min_sdk).text = "SDK" + app.minSdkVersion.toString()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            dialogView.findViewById<TextView>(R.id.app_min_sdk).text =
+                "SDK" + app.minSdkVersion.toString()
+        }else{
+            dialogView.findViewById<TextView>(R.id.app_min_sdk).text = "UNSupport！"
+        }
         dialogView.findViewById<TextView>(R.id.app_version_name).text = "Version Name: " + app.versionName
         dialogView.findViewById<TextView>(R.id.app_version_code).text = "Version Code: " + app.versionCode
         dialogView.findViewById<ImageView>(R.id.app_logo).setImageDrawable(loadAppIcon(app))
@@ -121,7 +126,12 @@ class DialogSingleAppOptions(context: Activity, var app: AppInfo, handler: Handl
 
         val dialog = DialogHelper.customDialog(context, dialogView)
         dialogView.findViewById<TextView>(R.id.app_target_sdk).text = "SDK" + app.targetSdkVersion.toString()
-        dialogView.findViewById<TextView>(R.id.app_min_sdk).text = "SDK" + app.minSdkVersion.toString()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            dialogView.findViewById<TextView>(R.id.app_min_sdk).text =
+                "SDK" + app.minSdkVersion.toString()
+        }else{
+            dialogView.findViewById<TextView>(R.id.app_min_sdk).text = "UNSupport！"
+        }
         dialogView.findViewById<TextView>(R.id.app_version_name).text = "Version Name: " + app.versionName
         dialogView.findViewById<TextView>(R.id.app_version_code).text = "Version Code: " + app.versionCode
         dialogView.findViewById<ImageView>(R.id.app_logo).setImageDrawable(loadAppIcon(app))

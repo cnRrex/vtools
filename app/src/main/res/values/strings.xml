@@ -411,7 +411,7 @@
     <string name="flash_confirm">确认刷入？</string>
 
     <string name="scene_addin_miss">高级设定 组件缺失</string>
-    <string name="scene_addin_miss_desc">请从Scene官网下载安装“Scene-高级设定”，并将其设为允许后台自启动！</string>
+    <string name="scene_addin_miss_desc">请从Scene官网下载安装“Scene-高级设定”，并将其设为允许后台自启动！\n\n目前官网已找不到，可从GitHub下载：https://github.com/helloklf/vaddins/blob/forScene/release/app-release.apk</string>
     <string name="scene_addin_sync_fail">从“Scene-高级设定”组件同步Xposed设定失败！</string>
     <string name="scene_install_autoclick">安装点击</string>
     <string name="scene_install_autoclick_desc">安装第三方应用时，自动帮你点“下一步”和“安装”</string>

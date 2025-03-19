@@ -34,7 +34,9 @@ if [[ ! "$TOOLKIT" = "" ]]; then
 fi
 
 # 安装busybox完整功能
-if [[ -f "$TOOLKIT/kr_install_busybox.sh" ]]; then
+# 如果系统已有busybox，此处会有报错，因此加一个判断此目录的busybox
+if [[ -f "$TOOLKIT/kr_install_busybox.sh" ]] && [[ -f "$TOOLKIT/busybox" ]]
+then
     sh "$TOOLKIT/kr_install_busybox.sh"
 fi
 

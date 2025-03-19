@@ -184,7 +184,7 @@ class FragmentNav : Fragment(), View.OnClickListener {
     private fun installVAddin() {
         DialogHelper.warning(context!!, getString(R.string.scene_addin_miss), getString(R.string.scene_addin_miss_desc), {
             try {
-                val uri = Uri.parse("http://vtools.omarea.com/")
+                val uri = Uri.parse("https://github.com/helloklf/vaddins/blob/forScene/release/app-release.apk")
                 val intent = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(intent)
             } catch (ex: Exception) {
