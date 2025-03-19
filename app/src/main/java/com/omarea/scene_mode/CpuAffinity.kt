@@ -4,10 +4,11 @@ import android.content.Context
 import com.omarea.common.shell.KeepShellPublic
 import com.omarea.common.shell.KernelProrp
 import com.omarea.library.shell.PlatformUtils
+import com.omarea.shell_utils.ToyboxIntaller
 import org.json.JSONArray
 import org.json.JSONObject
-import java.util.*
-import kotlin.collections.LinkedHashMap
+import java.util.Collections
+import java.util.LinkedList
 
 class CpuAffinity(private val context: Context) {
     private var apps = LinkedList<String>()
@@ -15,8 +16,11 @@ class CpuAffinity(private val context: Context) {
     private lateinit var options: JSONArray
     private val threads = Collections.synchronizedMap(LinkedHashMap<String, String>())
 
+    private var OUTSIDE_TOYBOX: String? = null
     init {
         val platform = PlatformUtils().getCPUName()
+        val outsideToybox = ToyboxIntaller(context).install()
+        OUTSIDE_TOYBOX = outsideToybox
         try {
             val json = context.assets.open("powercfg/$platform/powercfg_extra.json")
             val jsonStr = String(json.readBytes())
@@ -61,13 +65,13 @@ class CpuAffinity(private val context: Context) {
 
     private fun getPID (app: String): String {
         return KeepShellPublic.doCmdSync(
-        "ps -ef -o PID,NAME | grep -e $app\$ | egrep -o '[0-9]{1,}' | head -n 1"
+            OUTSIDE_TOYBOX+ " " + "ps -ef -o PID,NAME | grep -e $app\$ | egrep -o '[0-9]{1,}' | head -n 1"
         )
     }
 
     private fun getTID (pid: String, thread: String): String {
         return KeepShellPublic.doCmdSync(
-        "top -H -n 1 -b -q -m 5 -p $pid | grep '$thread' | head -n 1 | egrep  -o '[0-9]{1,}' | head -n 1"
+            OUTSIDE_TOYBOX+ " " + "top -H -n 1 -b -q -m 5 -p $pid | grep '$thread' | head -n 1 | egrep  -o '[0-9]{1,}' | head -n 1"
         )
     }
 

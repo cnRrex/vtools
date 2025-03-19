@@ -59,16 +59,48 @@ public class GpuUtils {
             String path2 = "/sys/kernel/gpu/gpu_clock";
             String path3 = "/sys/kernel/debug/ged/hal/current_freqency"; // 天玑820
             String path4 = "/sys/kernel/ged/hal/current_freqency"; // 天玑1200
+            String path5 = "/sys/class/devfreq/dfrgx/cur_freq"; //powervr rougue rgx /1000
+            String path6 = "/sys/class/drm/card0/gt_cur_freq_mhz"; //intel gt
+            String path7 = "/sys/devices/platform/gpusysfs/gpu_clock"; //gpu sys
+            String path8 = "/sys/devices/platform/omap/pvrsrvkm.0/sgxfreq/frequency"; //power sgx /1000000
+            String path9 = "/sys/kernel/tegra_gpu/gpu_rate"; //tegra /1000000
+            String path10 = "/sys/class/devfreq/gr3d/cur_freq"; //tegra3_4 /1000000
+            String path11 = "/sys/class/devfreq/gk20a.0/cur_freq"; //tegrak1 /1000000
+            String path12 = "/sys/class/devfreq/devfreq-vpu.0/cur_freq"; //Vivante /1000
             if (RootFile.INSTANCE.fileExists(path1)) {
                 GPU_FREQ_CMD = "cat " + path1;
             } else if (RootFile.INSTANCE.fileExists(path2)) {
                 GPU_FREQ_CMD = "cat " + path2;
             } else if (RootFile.INSTANCE.fileExists(path3)) {
                 // 天玑820
-                GPU_FREQ_CMD = "echo $((`cat /sys/kernel/debug/ged/hal/current_freqency | cut -f2 -d ' '` / 1000))";
+                GPU_FREQ_CMD = "echo $((`cat " + path3 + " | cut -f2 -d ' '` / 1000))";
             } else if (RootFile.INSTANCE.fileExists(path4)) {
                 // 天玑1200
-                GPU_FREQ_CMD = "echo $((`cat /sys/kernel/ged/hal/current_freqency | cut -f2 -d ' '` / 1000))";
+                GPU_FREQ_CMD = "echo $((`cat " + path4 + " | cut -f2 -d ' '` / 1000))";
+            } else if (RootFile.INSTANCE.fileExists(path5)) {
+                // powervr rougue1
+                GPU_FREQ_CMD = "echo $((`cat " + path5 + " | cut -f2 -d ' '` / 1000))";
+            } else if (RootFile.INSTANCE.fileExists(path6)) {
+                // intel gt
+                GPU_FREQ_CMD = "cat " + path6;
+            } else if (RootFile.INSTANCE.fileExists(path7)) {
+                // gpu sys
+                GPU_FREQ_CMD = "cat " + path7;
+            } else if (RootFile.INSTANCE.fileExists(path8)) {
+                // powervr sgx
+                GPU_FREQ_CMD = "echo $((`cat " + path8 + " | cut -f2 -d ' '` / 1000000))";
+            } else if (RootFile.INSTANCE.fileExists(path9)) {
+                // powervr rougue1
+                GPU_FREQ_CMD = "echo $((`cat " + path9 + " | cut -f2 -d ' '` / 1000000))";
+            } else if (RootFile.INSTANCE.fileExists(path10)) {
+                // powervr rougue1
+                GPU_FREQ_CMD = "echo $((`cat " + path10 + " | cut -f2 -d ' '` / 1000000))";
+            } else if (RootFile.INSTANCE.fileExists(path11)) {
+                // powervr rougue1
+                GPU_FREQ_CMD = "echo $((`cat " + path11 + " | cut -f2 -d ' '` / 1000000))";
+            } else if (RootFile.INSTANCE.fileExists(path12)) {
+                // powervr rougue1
+                GPU_FREQ_CMD = "echo $((`cat " + path12 + " | cut -f2 -d ' '` / 1000))";
             } else {
                 GPU_FREQ_CMD = "";
             }

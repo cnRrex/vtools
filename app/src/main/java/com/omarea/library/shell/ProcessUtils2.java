@@ -1,5 +1,7 @@
 package com.omarea.library.shell;
 
+import static com.omarea.Scene.context;
+
 import android.content.Context;
 
 import com.omarea.common.shell.KeepShellPublic;
@@ -31,6 +33,7 @@ public class ProcessUtils2 {
     // pageSize 获取 : getconf PAGESIZE
 
     private static String PS_COMMAND = null;
+    private static String OUTSIDE_TOYBOX = null;
 
     // 兼容性检查（TODO: 首次调用此函数可能比较耗时，需要调用这做loading优化体验）
     public boolean supported(Context context) {
@@ -43,6 +46,7 @@ public class ProcessUtils2 {
 
             String insideCmd = "ps -e -o %CPU,NAME,COMMAND,PID";
             String outsideCmd = outsideToybox + " " + insideCmd;
+            OUTSIDE_TOYBOX = outsideToybox;
 
             for (String cmd : new String[]{ outsidePerfectCmd, perfectCmd, outsideCmd, insideCmd }) {
                 String[] rows = KeepShellPublic.INSTANCE.doCmdSync(cmd + " 2>&1").split("\n");
@@ -141,8 +145,11 @@ public class ProcessUtils2 {
 
     // 获取安卓应用主进程PID
     public int getAppMainProcess(String packageName) {
+        if (OUTSIDE_TOYBOX == null) {
+            supported(context);
+        }
         String pid = KeepShellPublic.INSTANCE.doCmdSync(
-            String.format("ps -ef -o PID,NAME | grep -e %s$ | egrep -o '[0-9]{1,}' | head -n 1", packageName)
+            String.format(OUTSIDE_TOYBOX + " " + "ps -ef -o PID,NAME | grep -e %s$ | egrep -o '[0-9]{1,}' | head -n 1", packageName)
         );
         if (pid.isEmpty() || pid.equals("error")) {
           return -1;
@@ -162,8 +169,11 @@ public class ProcessUtils2 {
 
     // 获取某个进程的所有线程
     private String getThreads(final int pid) {
+        if (OUTSIDE_TOYBOX == null) {
+            supported(context);
+        }
         return KeepShellPublic.INSTANCE.doCmdSync(
-            String.format("top -H -b -q -n 1 -p %d -o TID,%%CPU,CMD", pid)
+            String.format(OUTSIDE_TOYBOX + " " + "top -H -b -q -n 1 -p %d -o TID,%%CPU,CMD", pid)
         );
     }
 
