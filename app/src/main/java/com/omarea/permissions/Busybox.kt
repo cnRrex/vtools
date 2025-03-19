@@ -42,15 +42,25 @@ class Busybox(private var context: Context) {
         } else {
             val installPath = context.getString(R.string.toolkit_install_path)
             val absInstallPath = FileWrite.getPrivateFilePath(context, installPath)
-            File("$absInstallPath/md5sum").exists() && File("$absInstallPath/busybox_1_30_1").exists()
+            File("$absInstallPath/md5sum").exists() && File("$absInstallPath/busybox_private").exists()
         }
     }
 
     private fun installPrivateBusybox(): Boolean {
         if (!(privateBusyboxInstalled() || systemBusyboxInstalled())) {
             // ro.product.cpu.abi
-            val abi = Build.SUPPORTED_ABIS.joinToString(" ").toLowerCase(Locale.getDefault())
-            if (!abi.contains("arm")) {
+            // val abi = Build.SUPPORTED_ABIS.joinToString(" ").toLowerCase(Locale.getDefault())
+
+            //busybox from https://github.com/meefik/busybox
+            val os_abi = System.getProperty("os.arch")
+            val toolkit_busybox_name = when (os_abi) {
+                "aarch64" -> "toolkit/busybox-arm64"
+                "armv7l" -> "toolkit/busybox-arm"
+                "x86_64" -> "toolkit/busybox-x86_64"
+                "i686" -> "toolkit/busybox-x86"
+                else -> "" // set to unsupported
+            }
+            if (toolkit_busybox_name == "") {
                 return false
             }
             val installPath = context.getString(R.string.toolkit_install_path)
@@ -60,7 +70,7 @@ class Busybox(private var context: Context) {
             val privateBusybox = FileWrite.getPrivateFilePath(context, busyboxInstallPath)
             if (!(File(privateBusybox).exists() || FileWrite.writePrivateFile(
                             context.assets,
-                            "toolkit/busybox",
+                            toolkit_busybox_name,
                             busyboxInstallPath, context) == privateBusybox)
             ) {
                 return false
@@ -78,8 +88,17 @@ class Busybox(private var context: Context) {
     }
 
     fun forceInstall(next: Runnable) {
+        // Rrex: We don't actually support "FORCE" install, so this will fallback to arm when not supported
+        val os_abi = System.getProperty("os.arch")
+        val toolkit_busybox_name = when (os_abi) {
+            "aarch64" -> "toolkit/busybox-arm64"
+            "armv7l" -> "toolkit/busybox-arm"
+            "x86_64" -> "toolkit/busybox-x86_64"
+            "i686" -> "toolkit/busybox-x86"
+            else -> "toolkit/busybox-arm" // fallback to arm
+        }
         val privateBusybox = FileWrite.getPrivateFilePath(context, "busybox")
-        if (!(File(privateBusybox).exists() || FileWrite.writePrivateFile(context.assets, "toolkit/busybox", "busybox", context) == privateBusybox)) {
+        if (!(File(privateBusybox).exists() || FileWrite.writePrivateFile(context.assets, toolkit_busybox_name, "busybox", context) == privateBusybox)) {
             return
         }
         if (systemBusyboxInstalled()) {

@@ -148,6 +148,10 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         }
 
         home_device_name.text = when (Build.VERSION.SDK_INT) {
+            35 -> "Android 15"
+            34 -> "Android 14"
+            33 -> "Android 13"
+            32 -> "Android 12L"
             31 -> "Android 12"
             30 -> "Android 11"
             29 -> "Android 10"

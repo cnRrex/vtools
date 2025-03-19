@@ -15,12 +15,12 @@ busybox_install() {
     ;;
     esac
   done
-  ./busybox ln -sf busybox busybox_1_30_1
+  ./busybox ln -sf busybox busybox_private
 }
 
 if [[ ! "$install_path" = "" ]] && [[ -d "$install_path" ]]; then
   cd "$install_path"
-  if [[ ! -f busybox_1_30_1 ]]; then
+  if [[ ! -f busybox_private ]]; then
     busybox_install
   fi
 fi
