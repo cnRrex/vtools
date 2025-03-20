@@ -131,6 +131,7 @@ class AdapterProcessMini(private val context: Context,
                         val name = if (item.name.contains(":")) item.name.substring(0, item.name.indexOf(":")) else item.name
                         icon = appInfoLoader.loadIcon(name).await()
                     } catch (ex: Exception) {
+                        icon = null
                     }
                     imageView.post {
                         imageView.setImageDrawable(if (icon != null) icon else androidIcon)

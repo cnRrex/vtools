@@ -21,6 +21,7 @@ class ProcessUtilsSimple(private val context: Context) {
     版权声明：本文为CSDN博主「火山石」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
     原文链接：https://blog.csdn.net/zhangcanyan/java/article/details/84556808
     */
+    private var outsideToyboxPath:String? = null
     private val psCommand = object : TripleCacheValue(context, "ProcessUtils2CMD") {
         override fun initValue(): String {
             val outsideToybox = ToyboxIntaller(context).install()
@@ -28,6 +29,7 @@ class ProcessUtilsSimple(private val context: Context) {
             val outsidePerfectCmd = "$outsideToybox $perfectCmd"
             val insideCmd = "ps -e -o %CPU,NAME,COMMAND,PID"
             val outsideCmd = "$outsideToybox $insideCmd"
+            outsideToyboxPath = outsideToybox
             for (cmd in arrayOf(outsidePerfectCmd, perfectCmd, outsideCmd, insideCmd)) {
                 val rows = KeepShellPublic.doCmdSync("$cmd 2>&1").split("\n".toRegex()).toTypedArray()
                 val result = rows[0]
@@ -70,8 +72,10 @@ class ProcessUtilsSimple(private val context: Context) {
     // 从进程列表排除的应用
     private val excludeProcess: ArrayList<String> = object : ArrayList<String>() {
         init {
-            add("toybox-outside")
-            add("toybox-outside64")
+            add("toybox-aarch64");
+            add("toybox-armv7l");
+            add("toybox-x86_64");
+            add("toybox-i686");
             add("ps")
             add("top")
             add("com.omarea.vtools")
@@ -136,8 +140,11 @@ class ProcessUtilsSimple(private val context: Context) {
 
     // 获取安卓应用主进程PID
     fun getAppMainProcess(packageName: String?): Int {
+        if (outsideToyboxPath == null) {
+            outsideToyboxPath = ToyboxIntaller(context).install()
+        }
         val pid = KeepShellPublic.doCmdSync(
-            String.format("ps -ef -o PID,NAME | grep -e %s$ | egrep -o '[0-9]{1,}' | head -n 1", packageName)
+            String.format("$outsideToyboxPath ps -ef -o PID,NAME | grep -e %s$ | egrep -o '[0-9]{1,}' | head -n 1", packageName)
         )
         return if (pid.isEmpty() || pid == "error") {
             -1
@@ -162,8 +169,11 @@ class ProcessUtilsSimple(private val context: Context) {
 
     // 获取某个进程的所有线程
     private fun getThreads(pid: Int): String {
+        if (outsideToyboxPath == null) {
+            outsideToyboxPath = ToyboxIntaller(context).install()
+        }
         return KeepShellPublic.doCmdSync(
-            String.format("top -H -b -q -n 1 -p %d -o TID,%%CPU,CMD", pid)
+            String.format("$outsideToyboxPath top -H -b -q -n 1 -p %d -o TID,%%CPU,CMD", pid)
         )
     }
 

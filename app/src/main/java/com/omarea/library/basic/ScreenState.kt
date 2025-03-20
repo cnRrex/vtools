@@ -25,7 +25,12 @@ class ScreenState(private var context: Context) {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             mKeyguardManager.isDeviceLocked || mKeyguardManager.isKeyguardLocked
         } else {
-            mKeyguardManager.inKeyguardRestrictedInputMode() || mKeyguardManager.isDeviceLocked || mKeyguardManager.isKeyguardLocked
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                mKeyguardManager.inKeyguardRestrictedInputMode() || mKeyguardManager.isDeviceLocked || mKeyguardManager.isKeyguardLocked
+            } else {
+                TODO("VERSION.SDK_INT < LOLLIPOP_MR1")
+                mKeyguardManager.inKeyguardRestrictedInputMode() || mKeyguardManager.isKeyguardLocked
+            }
         }
     }
 

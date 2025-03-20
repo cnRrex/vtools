@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import com.omarea.common.shared.FileWrite
 import com.omarea.common.shell.ShellExecutor
@@ -23,6 +24,7 @@ import com.omarea.scene_mode.TriggerIEventMonitor
 import com.omarea.store.SpfConfig
 import com.omarea.utils.CrashHandler
 import com.omarea.vtools.R
+import kotlin.concurrent.thread
 
 class Scene : Application() {
     companion object {
@@ -111,6 +113,13 @@ class Scene : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // On my device it has a exception:
+        // java.lang.RuntimeException: createContext failed: EGL_BAD_CONFIG
+        // TODO
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+            Log.e("CRASH", "Uncaught exception", throwable)
+        }
+
     }
 
     override fun attachBaseContext(base: Context?) {

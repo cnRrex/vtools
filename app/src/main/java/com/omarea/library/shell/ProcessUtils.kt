@@ -88,8 +88,10 @@ class ProcessUtils(private val context: Context) {
     // 从进程列表排除的应用
     private val excludeProcess: ArrayList<String> = object : ArrayList<String>() {
         init {
-            add("toybox-outside")
-            add("toybox-outside64")
+            add("toybox-aarch64");
+            add("toybox-armv7l");
+            add("toybox-x86_64");
+            add("toybox-i686");
             add("ps")
             add("top")
             add("com.omarea.vtools")

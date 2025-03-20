@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true">
 
@@ -73,7 +74,7 @@
                 android:padding="5dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/kr_copy"
-                android:tint="?android:colorAccent" />
+                app:tint="?android:colorAccent" />
 
             <TextView
                 android:layout_width="0dp"
@@ -101,7 +102,7 @@
                 android:padding="5dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/kr_close"
-                android:tint="@android:color/holo_red_dark" />
+                app:tint="@android:color/holo_red_dark" />
 
             <TextView
                 android:layout_width="0dp"

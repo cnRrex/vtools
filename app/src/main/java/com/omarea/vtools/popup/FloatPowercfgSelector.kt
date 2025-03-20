@@ -265,7 +265,9 @@ class FloatPowercfgSelector(context: Context) {
 
                 if (isChecked) {
                     if (!NotificationListener().getPermission(context)) {
-                        NotificationListener().setPermission(context)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                            NotificationListener().setPermission(context)
+                        }
                         Toast.makeText(context, context.getString(R.string.scene_need_notic_listing), Toast.LENGTH_SHORT).show()
                         it.isChecked = false
                         return@setOnClickListener

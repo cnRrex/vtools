@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="SceneTabLayout">
         <item name="android:background">?cardBg</item>
         <item name="tabIndicator">@null</item>
@@ -86,7 +86,7 @@
         <item name="colorControlNormal">?android:textColorPrimary</item>
         <item name="android:foregroundTint">?android:textColorSecondary</item>
         <item name="android:foregroundTintMode">screen</item>
-        <item name="android:drawableTint">?android:textColorPrimary</item>
+        <item name="android:drawableTint" tools:targetApi="m">?android:textColorPrimary</item>
     </style>
 
     <style name="AppThemeWhite" parent="AppThemeLight">
@@ -235,7 +235,7 @@
         <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
         <item name="android:drawablePadding">10dp</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:drawableTint">#666666</item>
+        <item name="android:drawableTint" tools:targetApi="m">#666666</item>
     </style>
     <style name="nav_item_wrap_right" parent="nav_item_wrap">
         <item name="android:layout_marginLeft">@dimen/activity_horizontal_margin</item>

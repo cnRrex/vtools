@@ -44,6 +44,7 @@ open class AppInfoLoader(private val context: Context, private val cacheSize: In
                         saveCache(item.packageName, icon)
                     }
                 } catch (ex: Exception) {
+                    icon = null
                 }
             }
             return@async icon
@@ -63,6 +64,8 @@ open class AppInfoLoader(private val context: Context, private val cacheSize: In
                 icon = installInfo.applicationInfo.loadIcon(pm)
                 saveCache(packageName, icon)
             } catch (ex: Exception) {
+                //try use android
+                icon = null
             } finally {
             }
             return@async icon
@@ -82,6 +85,8 @@ open class AppInfoLoader(private val context: Context, private val cacheSize: In
                 icon = installInfo.applicationInfo.loadIcon(pm)
                 // saveCache(packageName, icon)
             } catch (ex: Exception) {
+                name = ""
+                icon = null
             } finally {
             }
 

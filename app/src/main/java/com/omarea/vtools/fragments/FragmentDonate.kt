@@ -101,6 +101,7 @@ class FragmentDonate : androidx.fragment.app.Fragment(), View.OnClickListener {
 
     private fun tryOpenApp(packageName: String) {
         val pm = context!!.packageManager
+        Toast.makeText(context!!, "open "+packageName, Toast.LENGTH_SHORT).show()
         if (packageName.equals("com.omarea.gesture")) {
             try {
                 val intent = Intent(Intent.ACTION_VIEW)
@@ -131,7 +132,17 @@ class FragmentDonate : androidx.fragment.app.Fragment(), View.OnClickListener {
         } catch (ex: java.lang.Exception) {
         }
 
-        openUrl("https://www.coolapk.com/apk/" + packageName)
+        //   可用的替代链接
+        //https://github.com/helloklf/EdgeGesture/releases/latest
+        //https://apkpure.com/屏幕滤镜/com.omarea.filter
+        //https://apkpure.com/gesture/com.omarea.gesture
+
+        if (packageName.equals("com.omarea.gesture")) {
+            openUrl("https://apkpure.com/gesture/com.omarea.gesture")
+        }else if (packageName.equals("com.omarea.filter")) {
+            openUrl("https://apkpure.com/屏幕滤镜/com.omarea.filter")
+        }
+        //openUrl("https://www.coolapk.com/apk/" + packageName)
         /*
             Uri uri = Uri.parse("market://details?id=" + appPkg);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -150,6 +161,7 @@ class FragmentDonate : androidx.fragment.app.Fragment(), View.OnClickListener {
     }
 
     private fun openUrl(link: String) {
+        Toast.makeText(context!!, link, Toast.LENGTH_SHORT).show()
         try {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
