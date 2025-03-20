@@ -117,7 +117,7 @@ class Scene : Application() {
         // java.lang.RuntimeException: createContext failed: EGL_BAD_CONFIG
         // TODO
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
-            Log.e("CRASH", "Uncaught exception", throwable)
+            Log.e("SCENE5-CRASH", "Uncaught exception", throwable)
         }
 
     }
